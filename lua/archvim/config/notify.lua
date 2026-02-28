@@ -1,0 +1,44 @@
+if not require'archvim.options'.disable_notify then
+    vim.notify = require('notify')
+    vim.notify.setup {
+        background_colour = "#1e1e1e",
+        render = 'minimal',
+        minimum_width = 50,
+        max_width = 100,
+        timeout = 1000,
+    }
+end
+
+require("notify").setup({
+  -- 替换为你实际的背景色（推荐与 Normal 高亮组的背景一致）
+  background_colour = "#1e1e1e",  -- 示例：VS Code 深色背景
+})
+
+local old_notify = vim.notify
+vim.notify = function(msg, ...)
+    if msg:match("clangd: %-32602: failed to decode textDocument/documentHighlight request") then
+        return
+    end
+    if msg:match("warning: multiple different client offset_encodings") then
+        return
+    end
+    if msg:match("clipboard: error: Error: target STRING not available") then
+        return
+    end
+    if msg:match("You cannot close the last tab! This will exit neovim") then
+        return
+    end
+    if msg:match("message = \"trying to get preamble for non-added document\"") then
+        return
+    end
+    if msg:match("\"lsp_signatur handler\",") then
+        return
+    end
+    if msg:match("No results for %*%*") then
+        -- transform "No results for **qflist**\nBuffer: /home/bate/Codes/cppguidebook/examples/error_code.cpp"
+        -- into "No results for **qflist**"
+        msg = msg:gsub("No results for %*%*([%w_]+)%*%*\nBuffer: .+", "No results for %1")
+    end
+
+    old_notify(msg, ...)
+end

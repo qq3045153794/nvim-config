@@ -1,0 +1,58 @@
+# 把本文件放到 ~/.config/clangd/config.yaml
+CompileFlags:
+  Add:
+    - --no-cuda-version-check
+    - -Wno-unknown-warning-option
+   - -D__clangd__  # 添加你的自定义选项
+    # - -fgnuc-version=12.3.1
+  Remove:
+    - -forward-unknown-to-host-compiler
+    - -expt-*
+    - --expt-*
+    - -gencode*
+    - --generate-code*
+    - -Xfatbin*
+    - -arch=*
+    - -rdc=*
+    - -mno-*
+InlayHints:
+  ParameterNames: Yes
+  DeducedTypes: Yes
+
+Diagnostics:
+  #抑制写奇怪的错误报警
+  Suppress: ['builtin_definition']
+  ClangTidy:
+    Add: [
+      "*",  # 启用所有检查
+      modernize-use-nullptr,  # 使用 nullptr 代替 NULL
+      modernize-use-auto,  # 使用 auto 代替显式类型
+      performance-for-range-copy,  # 检查范围循环中的不必要拷贝
+      readability-implicit-bool-conversion,  # 检查隐式布尔转换
+      bugprone-branch-clone,  # 检查重复代码分支
+      bugprone-narrowing-conversions,  # 检查潜在的缩窄转换
+      cppcoreguidelines-init-variables,  # 确保变量初始化
+      modernize-loop-convert,  # 使用范围循环
+      readability-simplify-boolean-expr,  # 简化布尔表达式
+      cppcoreguidelines-pro-type-member-init # 检查类的构造函数是否初始化了所有成员变量
+    ]
+    Remove: [
+      abseil*, # 检查与 Google 的 Abseil 库相关
+      fuchsia*, # 检查与 Fuchsia 操作系统相关
+      llvmlib*, #  LLVM 项目相关的检查
+      zircon*, # 符合 Zircon 的开发规范
+      altera*, # 与 Altera（现为英特尔 FPGA）相关的检查
+      google-readability-todo, # 是否有未解决的 TODO 注释
+      readability-braces-around-statements, # 单行语句中使用大括号
+      hicpp-braces-around-statements,
+      readability-identifier-length, # 检查标识符（变量名、函数名等）的长度
+      cppcoreguidelines-avoid-magic-numbers, # 建议避免在代码中使用“魔术数字”
+      readability-magic-numbers, # 强调命名常量以提高可读性
+      performance-avoid-endl, # 检查流上 std::endl 的使用情况，并建议改用换行符 '\n'。
+      cppcoreguidelines-non-private-member-variables-in-classes, # 检查类中非私有成员变量的使用情况，并建议将它们设为私有
+      misc-non-private-member-variables-in-classes, # 检查类中非私有成员变量的使用情况，并建议将它们设为私有
+      modernize-* ,
+      cppcoreguidelines-avoid-do-while,
+      readability-function-cognitive-complexity,
+      readability-convert-member-functions-to-static
+      ]

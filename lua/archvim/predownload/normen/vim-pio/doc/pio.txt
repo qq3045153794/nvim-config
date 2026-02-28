@@ -1,0 +1,126 @@
+*pio.txt*  A PlatformIO plugin for VIM
+     _               _     ~
+__ _(_)_ __ ___ _ __(_)___ ~
+\ V / | '  \___| '_ \ / _ \~
+ \_/|_|_|_|_|  | .__/_\___/~
+               |_|         ~
+
+Author: Normen Hansen <https://github.com/normen>
+License: MIT
+
+INTRODUCTION                                    *pio*
+
+This is a collection of helper commands for VIM to ease the use of
+PlatformIO with VIM.
+
+COMMANDS                                        *pio-commands*
+
+The commands are the core of the plugin, allowing for basic control
+of PlatformIO projects.
+
+                                                *:PIO*
+:PIO {args}               Works like the platformio shell command, uses a
+                          single `:term` window. E.g. use `:PIO` `settings get`
+                          to show the global platformio settings.
+
+                                                *:PIOMonitor*
+:PIOMonitor               Starts a `:term` window with a `:PIO` `device monitor`
+                          command running. Can be opened separately from the
+                          main `:PIO` term window.
+
+                                                *:PIONewProject*
+:PIONewProject [args]     Shows a list of boards to select from. You can
+                          supply search terms to limit the board list, e.g.
+                          'esp32'.
+
+                          Pressing <CR> on a board name will create a new
+                          PlatformIO Project in the current folder or add
+                          the board to an existing project.
+
+                          It is effectively the same as running the command
+                          `:PIO` `project init --ide vim --board {boardname}`
+
+                          However `:PIONewProject` will also create a
+                          |Makefile| in the root folder and a "main.cpp" file
+                          in the "src" folder if they don't exist.
+
+                          Running the command `:PIO` `boards` will display the
+                          same list with the same functions.
+
+                                                *:PIOAddLibrary*
+:PIOAddLibrary {search}   Shows a list of available libraries based on the
+                          supplied search terms. Press <CR> on a name or ID
+                          in the list to install that library.
+
+                          You can use the following syntax to search for
+                          specifics like keywords, headers etc.
+
+                          - id:123
+                          - keyword:mqtt
+                          - header:RH_ASK.h
+                          - framework:Arduino
+                          - platform:espressif8266
+                          - author:Adafruit
+
+                          The platforms and frameworks of your project are
+                          always added to this search, use the command
+                          `:PIO` `lib search` directly to avoid this.
+
+                                                *:PIORemoveLibrary*
+:PIORemoveLibrary         Shows a list of installed libraries, press <CR> on
+                          a name to uninstall that library.
+
+                                                *:PIOInit*
+:PIOInit {args}           Creates a new project with the selected board name,
+                          supports auto-completion of the name. No list is
+                          displayed. Can also be used without an argument to
+                          refresh the project files.
+
+                          This yields the same result as running the command
+                          `:PIO` `project init --ide vim --board {args}`
+                          or
+                          `:PIO` `project init --ide vim`
+
+                          However this will also create a |Makefile| in the root 
+                          folder and a "main.cpp" file in the "src" folder if
+                          they don't exist.
+
+                                                *:PIOInstall*
+:PIOInstall {args}        Installs a library by name or id, supports auto-
+                          completion of the name. No list is displayed.
+
+                          This yields the same result as running the command
+                          `:PIO` `lib install {args}`
+
+                                                *:PIOUninstall*
+:PIOUninstall {args}      Removes a library from the project, supports auto-
+                          completion of the name. No list is displayed.
+
+                          This yields the same result as running the command
+                          `:PIO` `lib uninstall {args}`
+
+MAKEFILE                                        *pio-Makefile*
+ 
+The plugin creates a |Makefile| for the project with the following targets:
+- all (default)
+- upload
+- clean
+- program
+- uploadfs
+
+This way you can use a simple `:make` `upload` to compile and upload your code
+to your microcontroller.
+
+OTHER                                           *pio-other*
+
+Code completion~
+To get code completion please install |ccls| and a vim plugin to handle
+language servers (e.g. |vim-lsp| or |coc-nvim|).
+
+ABOUT                                           *pio-about*
+
+Grab the latest version or report a bug on GitHub:
+
+https://github.com/normen/vim-pio
+
+ vim:tw=78:et:ft=help:norl:

@@ -1,0 +1,17 @@
+# Compiled files
+plugin/packer_compiled.lua
+
+# AppImage
+nvim.appimage
+
+# Local overrides
+.vim_localrc
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
